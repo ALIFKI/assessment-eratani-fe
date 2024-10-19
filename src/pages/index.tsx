@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import NavBar from "../components/Navbar";
 import Slider from "react-slick";
 import HeaderSection from "../components/HeaderSection";
@@ -12,6 +12,28 @@ interface HomeProps {
 
 const Home: FC<HomeProps> = () => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleScroll = () => {
+    const scrollPosition =
+      window.innerHeight + document.documentElement.scrollTop;
+    const bottomPosition = document.documentElement.offsetHeight - 100; // Add some tolerance (100px) before the bottom
+
+    // Show the element when user reaches the bottom
+    if (scrollPosition >= bottomPosition) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const settings = {
     dots: true,
@@ -33,7 +55,7 @@ const Home: FC<HomeProps> = () => {
       currentSlide <= 0 ? undefined : <PrevArrow currentSlide={currentSlide} />,
   };
   return (
-    <div className="w-[100vw] flex justify-center flex-col overflow-hidden">
+    <div className="w-[100vw] flex justify-center flex-col overflow-hidden relative">
       <NavBar></NavBar>
       <section>
         <Slider className="banner" {...settings}>
@@ -654,6 +676,26 @@ const Home: FC<HomeProps> = () => {
           Copyright © 2021 by PT Eratani Teknologi Nusantara
         </div>
       </section>
+      <div
+        className={`fixed z-40 right-20 bottom-56 ${
+          isVisible ? "block" : "hidden"
+        }`}
+      >
+        <div className="h-[72px] w-[72px] flex justify-center items-center bg-primary rounded-full">
+          <svg
+            width="34"
+            height="20"
+            viewBox="0 0 34 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M29.0002 19.4L17.0002 7.39995L5.0002 19.4L0.200195 17L17.0002 0.199951L33.8002 17L29.0002 19.4Z"
+              fill="#121212"
+            />
+          </svg>
+        </div>
+      </div>
     </div>
   );
 };
