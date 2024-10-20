@@ -472,7 +472,7 @@ const Home: FC<HomeProps> = () => {
               type="submit"
               className="bg-primary px-4 font-lato leading-[40px] h-[62px] w-[286px] rounded-md text-[25px]"
             >
-              Kirim Pesan
+              Lokasi
             </button>
           </div>
         </div>
